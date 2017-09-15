@@ -1,8 +1,8 @@
 #!/bin/bash
 # simple automation script for ctf challenges
+# testet on kali rolling, you´ll need a running guake terminal.
 
 # prepare system
-UPD=N
 echo "update system? [y/N]"
 read UPD
 if [ $UPD==y ]
@@ -43,7 +43,7 @@ read TIP
 guake -n k -r "nmap" -e "cd /root/Desktop/$PROJ && nmap -p- -A -T4 $TIP "
 guake -n k -r "nmap_common" -e "cd /root/Desktop/$PROJ && nmap -p21,22,23,80,110,111,137,138,139,222,443,445,993,1309,1337,3128,3309,3389,4444,5901,8080 $TIP"
 
-#check if web port 80 is open
+# check if web port 80 is open
 WEB=$(nmap -p80 $TIP |grep open |cut -d " " -f 1 |cut -d "/" -f 1)
 if [ $WEB -eq 80 ];
 	then
@@ -55,11 +55,20 @@ if [ $WEB -eq 80 ];
 		echo "port 80 seems closed .... :("
 fi
 
+# check if ftp port is open
+FTP=$(nmap -p21 $TIP |grep open |cut -d " " -f 1 |cut -d "/" -f 1)
+if [ $WEB -eq 21 ];
+  then
+    # ftp auxiliary scanning and brute forcing
+    # TODO
+  else
+    echo "port 21 seems closed .... :("
+
 # start local webserver and msfconsole
 guake -n k -r "websrv" -e "cd /root/Desktop/$PROJ && python -m SimpleHTTPServer 8000"
 guake -n k -r "msfc" -e "cd /root/Desktop/$PROJ && msfconsole"
 
-# start usefol tools
+# start some basic tools
 echo "start some useful t00lz? [y/N]"
 read ANS
 	if [ $ANS==y ];
