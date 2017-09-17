@@ -19,6 +19,13 @@ echo "set payload $PAYLOAD" >> multi_handler.rc
 echo "exploit" >> multi_handler.rc
 
 # start msfconsole and use created ressource file
-echo "multi_handler.rc created.... now running msf"
-service postgresql start
-msfconsole -r multi_handler.rc
+echo "run msfconsole with those parameters? (y/N)"
+read ANS
+if [ $ANS=y ];
+  then
+    echo "multi_handler.rc created.... now running msf"
+    service postgresql start
+    msfconsole -r multi_handler.rc
+  else
+    echo "multi_handler.rc created, run it manually in msf"
+fi
