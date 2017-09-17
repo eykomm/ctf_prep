@@ -21,4 +21,4 @@ echo "exploit" >> multi_handler.rc
 # start msfconsole and use created ressource file
 echo "multi_handler.rc created.... now running msf"
 service postgresql start
-msfconsole -r php_multi.rc
+msfconsole -r multi_handler.rc
