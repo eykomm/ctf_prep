@@ -3,6 +3,8 @@
 # testet on kali rolling, you´ll need a running guake terminal.
 
 # prepare system
+
+## todo not using if, use cases
 echo "update system? [y/N]"
 read UPD
 if [ $UPD==y ]
