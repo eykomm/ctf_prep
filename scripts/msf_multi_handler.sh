@@ -19,16 +19,9 @@ echo "set payload $PAYLOAD" >> multi_handler.rc
 echo "exploit" >> multi_handler.rc
 
 # start msfconsole and use created ressource file
-
-## todo if clause bugfix
-
-echo "run msfconsole with those parameters? (y/N)"
-read ANS
-#if [ $ANS=y ];
-  then
-    echo "multi_handler.rc created.... now running msf"
-    service postgresql start
-    msfconsole -r multi_handler.rc
-  else
-    echo "multi_handler.rc created, run it manually in msf"
-fi
+read -p "run msfconsole with those parameters? (y/n)" ANS
+case  "$ANS" in
+  y|Y ) msfconsole -r multi_handler.rc;;
+  n|N ) echo "multi_handler.rc created, run it manually in msf";;
+  * ) echo "invalid input";;
+esac
