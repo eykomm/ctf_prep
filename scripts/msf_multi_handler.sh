@@ -23,5 +23,5 @@ read -p "run msfconsole with those parameters? (y/n)" ANS
 case  "$ANS" in
   y|Y ) msfconsole -r multi_handler.rc;;
   n|N ) echo "multi_handler.rc created, run it manually in msf";;
-  * ) echo "invalid input";;
+  * ) echo "invalid input, use multi_handler.rc manually";;
 esac
