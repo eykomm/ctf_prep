@@ -5,10 +5,6 @@ Find some useful tools, examples and references for basic pentest and CTF challe
 by `-LBr`
 
 
-[TOC]
-
-
-
 ----
 
 # web
@@ -368,6 +364,10 @@ The target post option (e.g. with Burp Repeater or curl):
 
 ```
 
+#### CSRF
+
+todo
+
 #### shell shock
 bash executes arbitrary commands
 
@@ -477,9 +477,13 @@ or
 
 # General Tools / Unsorted
 
-#### string 
+#### strings
 - Show printable characters in files with at least 3 characters:
 `> strings -n 3 '/path/to/file1' '/path/to/file2'`
+
+#### binwalk
+- analyzing firmware / files
+`> binwalk <file>`
 
 #### grep
 - filter certain file extention '.ext' in a 'file'
