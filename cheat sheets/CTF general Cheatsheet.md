@@ -1,7 +1,7 @@
 # CTF & pentest cheat sheet
 ----
 
-Find some useful tools, examples and references for basic pentest and CTF challenges.
+Find some useful tools, examples and references for basic pentest and CTF challenges focusing on unix machines.
 by `-LBr`
 
 
@@ -433,6 +433,10 @@ or
 `> uname -r`
 or
 `> cat /proc/version`
+
+- show sudo commands allowed for current user
+`> sudo -l`
+
 
 -----
 
