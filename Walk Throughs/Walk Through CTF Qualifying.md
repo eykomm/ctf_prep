@@ -8,6 +8,7 @@ by LBr && Nick Team `() ( ;:);`
 - found /js/ dir
 - found /templates/main.html (text on start page)
 - browsing ip https://137.193.69.250/ gives a html page "just as i said"
-- title of the page is "cd pub && more beer"
+- title of the page is "cd pub && more beer" < geek joke probably 
+
 ### burp interception
 - authentication is base64 encoded user:pw
