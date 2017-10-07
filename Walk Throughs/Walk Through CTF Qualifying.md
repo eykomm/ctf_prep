@@ -1,6 +1,10 @@
 # Write Up CTF17 Qualifying CODE UniBw 
 by LBr && Nick Team `() ( ;:);`
 
+## scoreboard (not part of the challenge)
+login doesn´t work > mailed the localos to fix it
+
+
 ## enumerating webpage
 
 - nikto just gives an custom header but nothing interesting
@@ -12,3 +16,8 @@ by LBr && Nick Team `() ( ;:);`
 
 ### burp interception
 - authentication is base64 encoded user:pw
+
+### Flag 1 in HERE.png
+Flag_C7B3175D8E253F3802
+got hint:
+Next Level URL (the password is the flag from the previous level): /551AC341714FE4F9AAD3B435B51404EE/
