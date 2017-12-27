@@ -1,4 +1,4 @@
-# Write Up CTF17 Qualifying CODE UniBw 
+# Write Up CTF17 Qualifying 
 by LBr && Nick Team `() ( ;:);`
 
 ## scoreboard (not part of the challenge)
