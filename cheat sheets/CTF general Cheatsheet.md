@@ -189,6 +189,19 @@ by `-LBr`
 - embed 'file' in image
 `> steghide --embed -cf 'coverfile.jpg' -ef 'file'`
 
+-----
+
+# Reverse Engineering
+
+#### strings
+- show content of a file
+`> strings <file>`
+
+#### ltrace
+- desc
+`ltrace ./<file> <param>`
+
+#### gdb
 
 -----
 
