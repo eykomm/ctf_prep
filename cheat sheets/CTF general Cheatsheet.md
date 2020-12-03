@@ -154,7 +154,7 @@ by `-LBr`
 `> hydra 'ip' http-form-post -l '' -P 'wordlist' "/pathto/index.php:key=^PASS^:Invalid Key"`
 
 - Crack Simple Weblogin
-`> hydra -l user -P /usr/share/wordlists/rockyou.txt 'Target IP' http-get /protected`
+`> hydra -l user -P /usr/share/wordlists/rockyou.txt 'Target IP' http-get /targetdir`
 
 #### patator
 - bruteforce webform password/key
