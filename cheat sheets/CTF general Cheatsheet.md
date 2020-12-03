@@ -153,6 +153,9 @@ by `-LBr`
 - Crack Key without username
 `> hydra 'ip' http-form-post -l '' -P 'wordlist' "/pathto/index.php:key=^PASS^:Invalid Key"`
 
+- Crack Simple Weblogin
+`> hydra -l user -P /usr/share/wordlists/rockyou.txt 'Target IP' http-get /protected`
+
 #### patator
 - bruteforce webform password/key
 `> patator http_fuzz url='url' method=POST body='key=FILE0' 0='path/to/wordlist.txt' follow=1  -x ignore:fgrep='invalid key'`
