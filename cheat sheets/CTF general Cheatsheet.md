@@ -33,9 +33,16 @@ by `-LBr`
 - Scanning for web directories
 `> dirb 'url' -w 'wordlist`
 
+#### gobuster
+- Scanning for web directories
+`> gobuster dir -u 'url' -w 'wordlist -x php,txt,html .`
+
 #### wfuzz
 - Fuzzing specific website using a directory wordlist
 `> wfuzz -c -z file,/path/to/wordlist.txt --hc 404,301,200 'url/FUZZ'`
+
+- Fuzzing specific website API
+`> wfuzz -c -z file,wordlist.txt http://example.url/api.php?param=FUZZ'`
 
 #### sqlmap
 - Scan url without knowing the exact db backend at higher level and risk
