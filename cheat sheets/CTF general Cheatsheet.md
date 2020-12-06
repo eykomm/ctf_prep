@@ -60,6 +60,9 @@ by `-LBr`
 - Scan using a payload and higher level
 `> sqlmap -u 'url' --data="data" --level 3 --risk 3 --dbs`
 
+- Scan a prerecorded Session from BurpSuite (right click --> Save as 'file')
+`> sqlmap -r 'file' `
+
 - Delete stored sessions
 `> sqlmap --purge-output`
 
