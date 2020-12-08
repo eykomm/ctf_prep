@@ -292,6 +292,11 @@ https://nmap.org/nsedoc/scripts/http-form-brute.html
 - redirect port through ssh tunnel
 `> ssh -L <port>:<remote ip>:<port> <ip>`
 
+#### scp
+
+- transfer files via ssh   
+`> scp user@ip:/dir/target/* .`
+
 #### xfreerdp
 - open remote desktop session with shared clipboard
 `> xfreerdp +clipboard /v:<ip> /u:<user> /w:<with> /h:<height>`
