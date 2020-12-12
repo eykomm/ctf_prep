@@ -321,6 +321,12 @@ https://nmap.org/nsedoc/scripts/http-form-brute.html
 - connect to a share
 `> smbclient -L <ip> -U <user>`
 
+#### enum4linux smb enumeration
+
+- -U get Userlist, -S get Shares, ... 
+
+`> enum4linux <IP>`
+
 #### bridging interfaces
 1. add a bridged interface
 `> brctl addbr <custom bridge name> `
