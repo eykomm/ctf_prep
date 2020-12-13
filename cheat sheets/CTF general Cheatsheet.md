@@ -635,15 +635,15 @@ Just rename the .php in php5 in case of simple extention checking.
 
 - use resource file after starting msfc
 
-`>msf>resource /file/to/rcname.rc`
+`msf>resource /file/to/rcname.rc`
 
 - use resource file while starting msfc
 
-`> msfc -r /file/to/rcname.rc`
+`> msfconsole -r /file/to/rcname.rc`
 
 - show rc file content
 
-`msfc> more /file/to/rcname.rc`
+`msf> more /file/to/rcname.rc`
 
 #### connect to a session [msf]
 	msf> sessions -l
