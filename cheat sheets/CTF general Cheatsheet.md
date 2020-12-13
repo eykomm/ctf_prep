@@ -627,6 +627,24 @@ Just rename the .php in php5 in case of simple extention checking.
 	msf> set payload php/meterpreter/reverse_tcp
 	msf> exploit
 
+#### create and use metasploit resource file
+
+- open msfc choose exploit and set values for options
+
+`msf> makerc /file/to/rcname.rc`
+
+- use resource file after starting msfc
+
+`>msf>resource /file/to/rcname.rc`
+
+- use resource file while starting msfc
+
+`> msfc -r /file/to/rcname.rc`
+
+- show rc file content
+
+`msfc> more /file/to/rcname.rc`
+
 #### connect to a session [msf]
 	msf> sessions -l
 	msf> session -i 'id'
